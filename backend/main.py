@@ -6,7 +6,7 @@ from src.hyperparameter_tuning import tune_logistic
 from sklearn.metrics import classification_report
 
 
-df = load_data('D:/ML Practice/Python/CustomerChurnPrediction/data/clean_data.csv')
+df = load_data('D:\ML Practice\ChurnPrediction\backend\data\clean_data.csv')
 
 X, y = preprocess(df)
 X_train, X_test, y_train, y_test = split_data(X, y)
