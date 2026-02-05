@@ -1,45 +1,137 @@
-import Sidebar from '../components/Sidebar';
-import TopBar from '../components/TopBar';
-import KPICard from '../components/KPICard';
-import { Users, AlertTriangle, TrendingDown, DollarSign } from 'lucide-react';
+import { useEffect, useState } from "react";
+import { 
+  Users, TrendingDown, DollarSign, Target, 
+  ChevronRight, BarChart3, PieChart, Activity,
+  Home, Zap, Brain
+} from "lucide-react";
 
-const Dashboard = () => {
+export default function Dashboard() {
+  const [data, setData] = useState([]);
+  const [activeNav, setActiveNav] = useState("Dashboard");
+
+  useEffect(() => {
+    fetch("/data/clean_data.csv")
+      .then(res => res.text())
+      .then(text => {
+        const rows = text.split("\n").slice(1);
+        const parsed = rows.map(r => r.split(","));
+        setData(parsed);
+      });
+  }, []);
+
+  const total = data.length;
+
+  const CHURN_INDEX = 8;
+  const churned = data.filter(r => r[CHURN_INDEX] === "Yes").length;
+  const churnRate = total ? ((churned / total) * 100).toFixed(2) : 0;
+
+  const MONTHLY_INDEX = 7;
+  const avgMonthly = total
+    ? (
+        data.reduce((s, r) => s + Number(r[MONTHLY_INDEX] || 0), 0) / total
+      ).toFixed(2)
+    : 0;
+
   return (
-    <div className="flex bg-[#F1F5F9] min-h-screen">
-      <Sidebar />
-      <main className="flex-1 ml-64 p-8">
-        <TopBar title="Executive Overview" />
-        
-        {/* KPI Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
-          <KPICard title="Total Customers" value="12840" icon={<Users size={20}/>} trend={-2} />
-          <KPICard title="Churn Risk" value="15" icon={<AlertTriangle size={20}/>} trend={5} />
-          <KPICard title="Retention Rate" value="88" icon={<TrendingDown size={20}/>} trend={1.2} />
-          <KPICard title="Revenue at Risk" value="45200" icon={<DollarSign size={20}/>} trend={8} />
+    <div className="flex min-h-screen bg-slate-100">
+
+   
+      <aside className="w-72 bg-slate-900 text-white px-6 py-8 border-r-4 border-indigo-600">
+        <div className="mb-12">
+          <div className="flex items-center gap-2 mb-2">
+            <Activity size={28} className="text-indigo-500" />
+            <h2 className="text-2xl font-black">ChurnAI</h2>
+          </div>
+          <p className="text-xs text-slate-400 uppercase tracking-widest font-bold">
+            Enterprise AI Unit
+          </p>
         </div>
 
-        {/* Chart Section Placeholder */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
-          <div className="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-80 flex items-center justify-center text-slate-400">
-             [ChurnAreaChart Component here]
-          </div>
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-80 flex items-center justify-center text-slate-400">
-             [CategoryBreakdown Component here]
-          </div>
+        <nav className="space-y-3">
+          {[
+            { name: "Dashboard", icon: <Home size={18} /> },
+            { name: "Prediction", icon: <Brain size={18} /> },
+            { name: "Insights", icon: <Zap size={18} /> }
+          ].map(item => (
+            <div
+              key={item.name}
+              onClick={() => setActiveNav(item.name)}
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition ${
+                activeNav === item.name
+                  ? "bg-indigo-600 text-white"
+                  : "hover:bg-slate-800 text-slate-400 hover:text-white"
+              }`}
+            >
+              {item.icon}
+              <span className="font-bold text-sm">{item.name}</span>
+              {activeNav === item.name && (
+                <ChevronRight size={16} className="ml-auto" />
+              )}
+            </div>
+          ))}
+        </nav>
+      </aside>
+
+
+      <main className="flex-1 p-8">
+
+        <div className="mb-10">
+          <h1 className="text-4xl font-black text-slate-900 mb-2">
+            Customer Churn <span className="text-indigo-600">Dashboard</span>
+          </h1>
+          {/* <p className="text-slate-600 text-sm font-medium">
+            Dataset loaded: {total.toLocaleString()} customers
+          </p> */}
         </div>
 
-        {/* Customer Table Section */}
-        <div className="mt-8 bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-          <div className="p-6 border-b border-slate-50">
-            <h2 className="font-bold text-slate-800">High Risk Customers</h2>
-          </div>
-          <div className="p-6 h-64 flex items-center justify-center text-slate-400 italic">
-            [CustomerTable Component will load here]
-          </div>
+        <div className="grid md:grid-cols-4 gap-6 mb-12">
+          <Card title="Total Customers" value={total} icon={<Users size={24} />} />
+          <Card title="Churn Rate" value={`${churnRate}%`} icon={<TrendingDown size={24} />} />
+          <Card title="Avg Monthly Charges" value={`$${avgMonthly}`} icon={<DollarSign size={24} />} />
+          <Card title="Model Recall" value="77%" icon={<Target size={24} />} />
         </div>
+
+
+        <div className="bg-slate-900 text-white p-6 rounded-2xl mb-12 border-l-4 border-indigo-600">
+          <p className="text-lg font-bold">
+            {churned.toLocaleString()} customers have churned
+          </p>
+        </div>
+
+
+        <div className="grid md:grid-cols-2 gap-8">
+
+          <div className="bg-white rounded-2xl shadow-lg p-8">
+            <h3 className="font-bold mb-4">Churn by Contract</h3>
+            <div className="h-64 flex items-center justify-center bg-slate-50 rounded-xl border-2 border-dashed border-slate-300">
+              <BarChart3 size={48} className="text-slate-400" />
+            </div>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-lg p-8">
+            <h3 className="font-bold mb-4">Tenure vs Churn</h3>
+            <div className="h-64 flex items-center justify-center bg-slate-50 rounded-xl border-2 border-dashed border-slate-300">
+              <PieChart size={48} className="text-slate-400" />
+            </div>
+          </div>
+
+        </div>
+
       </main>
     </div>
   );
-};
+}
 
-export default Dashboard;
+function Card({ title, value, icon }) {
+  return (
+    <div className="bg-white p-6 rounded-2xl shadow-md border-2 border-slate-200 hover:border-indigo-600 transition">
+      <div className="mb-3 text-indigo-600">{icon}</div>
+      <p className="text-xs text-slate-500 font-bold uppercase tracking-widest mb-2">
+        {title}
+      </p>
+      <h3 className="text-3xl font-black text-slate-900">
+        {value.toLocaleString()}
+      </h3>
+    </div>
+  );
+}
