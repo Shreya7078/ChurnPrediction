@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
 import { 
   Users, TrendingDown, DollarSign, Target, 
-  ChevronRight, Activity,
+  Activity,
   Home, Zap, Brain
 } from "lucide-react";
+import Sidebar from "../components/Sidebar";
+
+import { Link, useLocation } from "react-router-dom";
 
 import ChurnByContractChart from "../components/ChurnByContractChart";
 import TenureChurnChart from "../components/TenureChurnChart";
 
 export default function Dashboard() {
   const [data, setData] = useState([]);
-  const [activeNav, setActiveNav] = useState("Dashboard");
+
+  const location = useLocation();
 
   useEffect(() => {
     fetch("/data/clean_data.csv")
@@ -35,7 +39,7 @@ export default function Dashboard() {
       ).toFixed(2)
     : 0;
 
-  /* -------- REAL CHART DATA -------- */
+
 
   const contractTypes = ["Month-to-month", "One year", "Two year"];
 
@@ -73,46 +77,14 @@ export default function Dashboard() {
     };
   });
 
-  /* -------------------------------- */
+
 
   return (
     <div className="flex min-h-screen bg-slate-100">
 
-      <aside className="w-72 bg-slate-900 text-white px-6 py-8 border-r-4 border-indigo-600">
-        <div className="mb-12">
-          <div className="flex items-center gap-2 mb-2">
-            <Activity size={28} className="text-indigo-500" />
-            <h2 className="text-2xl font-black">ChurnAI</h2>
-          </div>
-          <p className="text-xs text-slate-400 uppercase tracking-widest font-bold">
-            Enterprise AI Unit
-          </p>
-        </div>
+      <Sidebar/>
 
-        <nav className="space-y-3">
-          {[
-            { name: "Dashboard", icon: <Home size={18} /> },
-            { name: "Prediction", icon: <Brain size={18} /> },
-            { name: "Insights", icon: <Zap size={18} /> }
-          ].map(item => (
-            <div
-              key={item.name}
-              onClick={() => setActiveNav(item.name)}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition ${
-                activeNav === item.name
-                  ? "bg-indigo-600 text-white"
-                  : "hover:bg-slate-800 text-slate-400 hover:text-white"
-              }`}
-            >
-              {item.icon}
-              <span className="font-bold text-sm">{item.name}</span>
-              {activeNav === item.name && (
-                <ChevronRight size={16} className="ml-auto" />
-              )}
-            </div>
-          ))}
-        </nav>
-      </aside>
+      {/* MAIN CONTENT */}
 
       <main className="flex-1 p-8">
 
@@ -125,7 +97,6 @@ export default function Dashboard() {
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           <Card title="Total Customers" value={total} icon={<Users size={24} />} />
           <Card title="Churn Rate" value={`${churnRate}%`} icon={<TrendingDown size={24} />} />
-          {/* <Card title="Avg Monthly Charges" value={`$${avgMonthly}`} icon={<DollarSign size={24} />} /> */}
           <Card title="Model Recall" value="77%" icon={<Target size={24} />} />
         </div>
 
@@ -134,8 +105,6 @@ export default function Dashboard() {
             {churned.toLocaleString()} customers have churned
           </p>
         </div>
-
-        
 
         <div className="grid md:grid-cols-2 gap-8">
           <ChurnByContractChart data={contractData} />
@@ -160,3 +129,4 @@ function Card({ title, value, icon }) {
     </div>
   );
 }
+``
