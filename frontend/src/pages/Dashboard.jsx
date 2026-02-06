@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { 
   Users, TrendingDown, DollarSign, Target, 
-  ChevronRight, BarChart3, PieChart, Activity,
+  ChevronRight, Activity,
   Home, Zap, Brain
 } from "lucide-react";
+
+import ChurnByContractChart from "../components/ChurnByContractChart";
+import TenureChurnChart from "../components/TenureChurnChart";
 
 export default function Dashboard() {
   const [data, setData] = useState([]);
@@ -32,10 +35,49 @@ export default function Dashboard() {
       ).toFixed(2)
     : 0;
 
+  /* -------- REAL CHART DATA -------- */
+
+  const contractTypes = ["Month-to-month", "One year", "Two year"];
+
+  const contractData = contractTypes.map(type => {
+    const group = data.filter(r => r[4] === type);
+    const churnGroup = group.filter(r => r[8] === "Yes").length;
+
+    return {
+      contract: type,
+      churnRate: group.length
+        ? ((churnGroup / group.length) * 100).toFixed(1)
+        : 0
+    };
+  });
+
+  const tenureBuckets = [
+    { label: "0-1yr", min: 0, max: 12 },
+    { label: "1-2yr", min: 12, max: 24 },
+    { label: "2-3yr", min: 24, max: 36 },
+    { label: "3-5yr", min: 36, max: 60 },
+    { label: "5+yr", min: 60, max: 100 }
+  ];
+
+  const tenureData = tenureBuckets.map(g => {
+    const group = data.filter(
+      r => Number(r[2]) >= g.min && Number(r[2]) < g.max
+    );
+    const churnGroup = group.filter(r => r[8] === "Yes").length;
+
+    return {
+      tenure: g.label,
+      churnRate: group.length
+        ? ((churnGroup / group.length) * 100).toFixed(1)
+        : 0
+    };
+  });
+
+  /* -------------------------------- */
+
   return (
     <div className="flex min-h-screen bg-slate-100">
 
-   
       <aside className="w-72 bg-slate-900 text-white px-6 py-8 border-r-4 border-indigo-600">
         <div className="mb-12">
           <div className="flex items-center gap-2 mb-2">
@@ -72,25 +114,20 @@ export default function Dashboard() {
         </nav>
       </aside>
 
-
       <main className="flex-1 p-8">
 
         <div className="mb-10">
           <h1 className="text-4xl font-black text-slate-900 mb-2">
             Customer Churn <span className="text-indigo-600">Dashboard</span>
           </h1>
-          {/* <p className="text-slate-600 text-sm font-medium">
-            Dataset loaded: {total.toLocaleString()} customers
-          </p> */}
         </div>
 
-        <div className="grid md:grid-cols-4 gap-6 mb-12">
+        <div className="grid md:grid-cols-3 gap-6 mb-12">
           <Card title="Total Customers" value={total} icon={<Users size={24} />} />
           <Card title="Churn Rate" value={`${churnRate}%`} icon={<TrendingDown size={24} />} />
-          <Card title="Avg Monthly Charges" value={`$${avgMonthly}`} icon={<DollarSign size={24} />} />
+          {/* <Card title="Avg Monthly Charges" value={`$${avgMonthly}`} icon={<DollarSign size={24} />} /> */}
           <Card title="Model Recall" value="77%" icon={<Target size={24} />} />
         </div>
-
 
         <div className="bg-slate-900 text-white p-6 rounded-2xl mb-12 border-l-4 border-indigo-600">
           <p className="text-lg font-bold">
@@ -98,23 +135,11 @@ export default function Dashboard() {
           </p>
         </div>
 
+        
 
         <div className="grid md:grid-cols-2 gap-8">
-
-          <div className="bg-white rounded-2xl shadow-lg p-8">
-            <h3 className="font-bold mb-4">Churn by Contract</h3>
-            <div className="h-64 flex items-center justify-center bg-slate-50 rounded-xl border-2 border-dashed border-slate-300">
-              <BarChart3 size={48} className="text-slate-400" />
-            </div>
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-lg p-8">
-            <h3 className="font-bold mb-4">Tenure vs Churn</h3>
-            <div className="h-64 flex items-center justify-center bg-slate-50 rounded-xl border-2 border-dashed border-slate-300">
-              <PieChart size={48} className="text-slate-400" />
-            </div>
-          </div>
-
+          <ChurnByContractChart data={contractData} />
+          <TenureChurnChart data={tenureData} />
         </div>
 
       </main>
