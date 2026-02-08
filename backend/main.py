@@ -5,8 +5,11 @@ import pandas as pd
 from src.hyperparameter_tuning import tune_logistic
 from sklearn.metrics import classification_report
 
+import joblib
+import os
 
-df = load_data('D:\ML Practice\ChurnPrediction\backend\data\clean_data.csv')
+
+df = load_data('D:/ML Practice/ChurnPrediction/backend/data/clean_data.csv')
 
 X, y = preprocess(df)
 X_train, X_test, y_train, y_test = split_data(X, y)
@@ -14,7 +17,7 @@ X_train, X_test, y_train, y_test = split_data(X, y)
 models = get_models()
 trained_models = train_models(models, X_train, y_train)
 
-results = evaluate_models(trained_models, X_test, y_test,X_train,y_train)
+results = evaluate_models(trained_models, X_test, y_test, X_train, y_train)
 
 results_df = pd.DataFrame(results)
 print(results_df.columns)
@@ -27,3 +30,11 @@ print("Best tuned parameters:", best_params)
 y_pred = best_model.predict(X_test)
 print(classification_report(y_test, y_pred))
 
+
+
+os.makedirs("model", exist_ok=True)
+
+
+joblib.dump(best_model, "model/churn_model.pkl")
+
+print(" Model saved at backend/model/churn_model.pkl")
