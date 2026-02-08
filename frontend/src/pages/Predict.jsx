@@ -96,7 +96,7 @@ export default function Predict() {
     <div className="flex min-h-screen bg-slate-100">
       <Sidebar />
 
-      <main className="flex-1 p-10">
+      <main className="flex-1 p-10 ml-72">
 
         {/* HEADER */}
         <div className="mb-12 pb-6 border-b-2 border-slate-300">
@@ -109,7 +109,7 @@ export default function Predict() {
             </p>
             <div className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-xl text-sm font-bold shadow-lg">
               <Database size={16} />
-              XGBoost Model
+              Logistic Regression
             </div>
           </div>
         </div>
@@ -187,54 +187,59 @@ export default function Predict() {
           </div>
 
           {/* RESULT SECTION */}
-          <div className="bg-white p-10 rounded-2xl shadow-2xl border-4 border-slate-300 flex flex-col">
+          <div className="bg-white rounded-2xl shadow-2xl border-4 border-slate-300 overflow-hidden">
 
-            <div className="flex items-center gap-3 mb-8 pb-4 border-b-2 border-slate-200">
+            <div className="flex items-center gap-3 p-8 pb-6 bg-slate-900 border-b-4 border-indigo-600">
               <div className="p-3 bg-indigo-600 rounded-2xl">
                 <TrendingDown size={28} className="text-white" />
               </div>
-              <h2 className="text-2xl font-black text-slate-900">
+              <h2 className="text-2xl font-black text-white">
                 Churn Probability
               </h2>
             </div>
 
             {probability !== null ? (
-              <div className="flex-1 flex flex-col items-center justify-center">
-                <div className="relative">
-                  <PieChart width={280} height={280}>
-                    <Pie
-                      data={chartData}
-                      dataKey="value"
-                      innerRadius={80}
-                      outerRadius={120}
-                      startAngle={90}
-                      endAngle={-270}
-                    >
-                      <Cell fill={probability > 0.5 ? "#DC2626" : "#4F46E5"} />
-                      <Cell fill="#E5E7EB" />
-                    </Pie>
-                  </PieChart>
-                  
-                  {/* Center Text */}
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-                    <p className="text-5xl font-black text-slate-900">
-                      {(probability * 100).toFixed(1)}%
-                    </p>
+              <div className="p-8">
+                {/* Pie Chart */}
+                <div className="flex justify-center mb-6">
+                  <div className="relative">
+                    <PieChart width={240} height={240}>
+                      <Pie
+                        data={chartData}
+                        dataKey="value"
+                        innerRadius={70}
+                        outerRadius={100}
+                        startAngle={90}
+                        endAngle={-270}
+                      >
+                        <Cell fill={probability > 0.5 ? "#DC2626" : "#4F46E5"} />
+                        <Cell fill="#E5E7EB" />
+                      </Pie>
+                    </PieChart>
+                    
+                    {/* Center Text */}
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
+                      <p className="text-5xl font-black text-slate-900">
+                        {(probability * 100).toFixed(1)}%
+                      </p>
+                      <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mt-1">Risk</p>
+                    </div>
                   </div>
                 </div>
 
-                <div className={`mt-8 px-8 py-4 rounded-2xl border-4 ${
+                {/* Status Badge */}
+                <div className={`px-6 py-4 rounded-2xl border-4 mb-6 ${
                   label === "Will Churn" 
                     ? "bg-red-50 border-red-400" 
                     : "bg-emerald-50 border-emerald-400"
                 }`}>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center justify-center gap-3">
                     {label === "Will Churn" ? (
-                      <TrendingDown size={28} className="text-red-600" />
+                      <TrendingDown size={24} className="text-red-600" />
                     ) : (
-                      <TrendingUp size={28} className="text-emerald-600" />
+                      <TrendingUp size={24} className="text-emerald-600" />
                     )}
-                    <p className={`text-xl font-black ${
+                    <p className={`text-lg font-black ${
                       label === "Will Churn" ? "text-red-700" : "text-emerald-700"
                     }`}>
                       {label}
@@ -243,16 +248,16 @@ export default function Predict() {
                 </div>
 
                 {/* Risk Level Indicator */}
-                <div className="mt-6 w-full">
+                <div>
                   <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 text-center">
-                    Risk Level
+                    Risk Assessment
                   </p>
-                  <div className="flex gap-2">
-                    <div className={`flex-1 h-3 rounded-full ${probability > 0 ? 'bg-emerald-500' : 'bg-slate-200'}`}></div>
-                    <div className={`flex-1 h-3 rounded-full ${probability > 0.33 ? 'bg-yellow-500' : 'bg-slate-200'}`}></div>
-                    <div className={`flex-1 h-3 rounded-full ${probability > 0.66 ? 'bg-red-500' : 'bg-slate-200'}`}></div>
+                  <div className="flex gap-2 mb-2">
+                    <div className={`flex-1 h-4 rounded-full transition-all ${probability > 0 ? 'bg-emerald-500' : 'bg-slate-200'}`}></div>
+                    <div className={`flex-1 h-4 rounded-full transition-all ${probability > 0.33 ? 'bg-yellow-500' : 'bg-slate-200'}`}></div>
+                    <div className={`flex-1 h-4 rounded-full transition-all ${probability > 0.66 ? 'bg-red-500' : 'bg-slate-200'}`}></div>
                   </div>
-                  <div className="flex justify-between mt-2">
+                  <div className="flex justify-between">
                     <span className="text-xs font-bold text-emerald-600">Low</span>
                     <span className="text-xs font-bold text-yellow-600">Medium</span>
                     <span className="text-xs font-bold text-red-600">High</span>
@@ -260,15 +265,15 @@ export default function Predict() {
                 </div>
               </div>
             ) : (
-              <div className="flex-1 flex flex-col items-center justify-center text-center">
-                <div className="p-6 bg-slate-100 rounded-full mb-6">
+              <div className="p-12 flex flex-col items-center justify-center text-center min-h-[400px]">
+                <div className="p-8 bg-slate-100 rounded-full mb-6 border-4 border-slate-200">
                   <Database size={64} className="text-slate-400" />
                 </div>
-                <p className="text-lg font-bold text-slate-600">
-                  Enter customer details to get prediction
+                <p className="text-lg font-bold text-slate-600 mb-2">
+                  Ready to Predict
                 </p>
-                <p className="text-sm text-slate-500 mt-2">
-                  Fill all fields in the form and click "Predict Churn"
+                <p className="text-sm text-slate-500">
+                  Fill all fields and click predict
                 </p>
               </div>
             )}

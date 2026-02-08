@@ -86,7 +86,7 @@ export default function Dashboard() {
 
       {/* MAIN CONTENT */}
 
-      <main className="flex-1 p-8">
+      <main className="flex-1 p-8 ml-72">
 
         <div className="mb-10">
           <h1 className="text-4xl font-black text-slate-900 mb-2">

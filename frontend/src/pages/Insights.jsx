@@ -16,8 +16,8 @@ export default function Insights() {
 
       <Sidebar />
 
-      <main className="flex-1 p-10">
-
+      <main className="flex-1 p-10 ml-72">
+      
         <h1 className="text-5xl font-black mb-12 text-black">
           Churn <span className="text-indigo-600">Insights</span>
         </h1>
