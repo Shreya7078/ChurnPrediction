@@ -1,0 +1,14 @@
+SeniorCitizen
+tenure
+MonthlyCharges
+Family
+SupportServices
+gender_Male
+InternetService_Fiber optic
+InternetService_No
+Contract_One year
+Contract_Two year
+PaperlessBilling_Yes
+PaymentMethod_Credit card (automatic)
+PaymentMethod_Electronic check
+PaymentMethod_Mailed check
