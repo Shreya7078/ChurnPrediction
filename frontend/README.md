@@ -316,5 +316,3 @@ For issues or questions:
 2. Verify the backend server is running
 3. Check the browser console for error messages
 4. Review the network tab in browser DevTools
-
-**Last Updated:** February 2026
