@@ -74,14 +74,14 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* METRICS - Clean Grid */}
-      <section ref={el => sectionRefs.current[2] = el} className="py-16 bg-white">
+      {/* METRICS - Clean Grid */} 
+     <section ref={el => sectionRefs.current[2] = el} className="py-16 bg-white">
         <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 px-8">
           {[
             { value: "77%", label: "Model Recall", icon: <Activity size={24} /> },
             { value: "7,043", label: "Dataset Size", icon: <Database size={24} /> },
-            { value: "XGBoost", label: "Algorithm", icon: <Cpu size={24} /> },
-            { value: "21", label: "Input Features", icon: <ShieldCheck size={24} /> }
+            { value: "Logistic Regression", label: "Algorithm", icon: <Cpu size={24} /> },
+            { value: "14", label: "Input Features", icon: <ShieldCheck size={24} /> }
           ].map((stat, i) => (
             <div 
               key={i} 
@@ -89,7 +89,7 @@ export default function Landing() {
               style={{ transitionDelay: `${i * 100}ms` }}
             >
               <div className="text-indigo-600 mb-3 flex justify-center">{stat.icon}</div>
-              <div className="text-3xl md:text-4xl font-black text-slate-900 mb-2">{stat.value}</div>
+              <div className="text-2xl md:text-4xl font-black text-slate-900 mb-2">{stat.value}</div>
               <div className="text-xs font-bold text-slate-500 uppercase tracking-widest">{stat.label}</div>
             </div>
           ))}
@@ -133,7 +133,7 @@ export default function Landing() {
             {[
               { step: "Data Load", desc: "Raw CSV Ingestion", icon: <Database size={28} /> },
               { step: "Encoding", desc: "Feature Engineering", icon: <Search size={28} /> },
-              { step: "Training", desc: "XGBoost Refinement", icon: <Cpu size={28} /> },
+              { step: "Training", desc: "Logistic Regression", icon: <Cpu size={28} /> },
               { step: "Export", desc: "JSON Risk Reports", icon: <Rocket size={28} /> }
             ].map((item, i) => (
               <div 
