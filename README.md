@@ -1,118 +1,88 @@
-#  Customer Churn Prediction – End to End Machine Learning Project
+# Telco Customer Churn Prediction System
 
-This project focuses on predicting customer churn using structured data analysis, feature engineering, and multiple machine learning models.  
-The goal is to identify high-risk customers early to improve retention strategies.
+An end-to-end Machine Learning application designed to predict customer churn risk in telecom datasets. The system integrates a trained ML model with a Flask API backend and a React-based interactive dashboard.
 
----
 
-##  Project Workflow
+## Project Overview
 
-1. Exploratory Data Analysis (EDA)  
-2. Data Cleaning & Feature Engineering  
-3. Feature Selection using business insights  
-4. Training multiple ML models  
-5. Model comparison using Recall & F1-score  
-6. Hyperparameter tuning of best model  
-7. Final churn prediction model  
+Customer churn is a major business problem in the telecom industry. This project predicts whether a customer is likely to leave based on service usage, contract type, billing preferences, and demographic features.
 
----
+The application allows users to input customer details and receive real-time churn probability along with risk classification.
+
+
+## Key Features
+
+- End-to-End ML Deployment (Model → API → UI)
+- Real-time Churn Prediction
+- Probability-based Risk Scoring
+- Interactive Visualization (Pie Chart)
+- Robust Input Validation
+- REST API Integration
+
+
+## Tech Stack
+
+**Frontend**
+- React (Vite)
+- Tailwind CSS
+- Recharts
+
+**Backend**
+- Python
+- Flask
+- scikit-learn
+
+**Machine Learning**
+- Logistic Regression
+- Feature Engineering
+- One-Hot Encoding
+
+
+## Dataset
+
+- Telco Customer Churn Dataset
+- Total Records: 7043
+
+
+## System Architecture
+- User → React Frontend → Flask API → ML Model → Prediction → UI
+
+## Project Structure
+Telco-Churn-Prediction/
+│
+├── frontend/ # React UI
+├── backend/ # Flask API + Model
+└── README.md
 
 ## How to Run the Project
 
-- Clone the repository
-- Navigate to project directory
-- Create virtual environment
-- Activate virtual environment
-- Install required dependencies
-- Run the main pipeline script
-- View model performance results
-- (Optional) Open EDA notebook
+  ### Backend Setup
 
+  cd backend
+  pip install -r requirements.txt
+  python app.py
 
-## Command reference
-- git clone https://github.com/your-username/CustomerChurnPrediction.git
-- cd CustomerChurnPrediction
-- python -m venv venv
-- venv\Scripts\activate
-- pip install -r requirements.txt
-- python main.py
+  Server runs on:
+  http://127.0.0.1:5000
 
-##  Project Structure
+  ### Frontend Setup
 
-CustomerChurnPrediction/
-│
-├── data/
-│ └── clean_data.csv
-  └── WA_Fn-UseC_-Telco-Customer-Churn.csv
-│
-├── notebooks/
-│ └── EDA.ipynb
-│
-├── src/
-│ ├── preprocessing.py
-│ ├── modeling.py
-│ ├── evaluation.py
-│ └── hyperparameter_tuning.py
-│
-├── main.py
-└── README.md
+  cd frontend
+  npm install
+  npm run dev
 
+  Frontend runs on:
+  http://localhost:5173
 
----
+## Model Details
 
-## Key Insights from EDA
+- Algorithm: Logistic Regression
+- Evaluation Focus: Recall Optimization for Churn Class
+- Encoded Features: 14
 
-- Month-to-month contract customers churn the most  
-- Customers with low tenure are high churn risk  
-- Higher monthly charges increase churn probability  
-- Support services significantly reduce churn  
-- Electronic check payment method has highest churn  
-- Family presence improves retention  
+## Future Improvements
 
----
-
-##  Models Implemented
-
-- Logistic Regression (Final Model)  
-- Decision Tree  
-- Random Forest  
-- Gradient Boosting  
-- XGBoost  
-- Support Vector Machine  
-- AdaBoost  
-
----
-
-## Final Tuned Model Performance (Logistic Regression)
-
-| Metric | Score |
-|-------|------|
-| Recall | 77% |
-| Precision | 50% |
-| F1-score | 61% |
-| Accuracy | 74% |
-
----
-
-## Why Recall was Prioritized
-
-In churn prediction, missing customers who are likely to leave is more costly than contacting a few loyal customers.
-
-Therefore:
-- Recall was optimized to capture maximum churners  
-- F1-score ensured balanced performance  
-
----
-
-## Technologies Used
-
-- Python  
-- Pandas, NumPy  
-- Scikit-learn  
-- XGBoost  
-- Matplotlib  
-
----
-
-
-
+- Pipeline-based Automatic Encoding
+- Feature Importance Visualization
+- Model Monitoring
+- Deployment (Docker / Cloud)

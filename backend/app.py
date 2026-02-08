@@ -37,13 +37,12 @@ def predict():
         return jsonify({"status": "ok"}), 200
     
     try:
-        # Check if model is loaded
+
         if model is None:
             return jsonify({
                 "error": "Model not loaded. Please train the model first by running main.py"
             }), 500
-        
-        # Get and validate request data
+      
         data = request.json
         print(f"Received prediction request: {data}")
         
@@ -82,20 +81,20 @@ def predict():
         
         # Prepare the 14 features
         features = [
-            yes_no[data["seniorCitizen"]],  # 0. SeniorCitizen
-            float(data["tenure"]),           # 1. tenure
-            float(data["monthlyCharges"]),   # 2. MonthlyCharges
-            yes_no[data["family"]],          # 3. Family
-            yes_no[data["supportServices"]], # 4. SupportServices
-            1 if data["gender"] == "Male" else 0,  # 5. gender_Male
-            1 if data["internetService"] == "Fiber optic" else 0,  # 6. InternetService_Fiber optic
-            1 if data["internetService"] == "No" else 0,           # 7. InternetService_No
-            1 if data["contract"] == "One year" else 0,            # 8. Contract_One year
-            1 if data["contract"] == "Two year" else 0,            # 9. Contract_Two year
-            yes_no[data["paperlessBilling"]],                      # 10. PaperlessBilling_Yes
-            1 if data["paymentMethod"] == "Credit card (automatic)" else 0,  # 11. PaymentMethod_Credit card (automatic)
-            1 if data["paymentMethod"] == "Electronic check" else 0,         # 12. PaymentMethod_Electronic check
-            1 if data["paymentMethod"] == "Mailed check" else 0              # 13. PaymentMethod_Mailed check
+            yes_no[data["seniorCitizen"]], 
+            float(data["tenure"]),        
+            float(data["monthlyCharges"]),  
+            yes_no[data["family"]],          
+            yes_no[data["supportServices"]],
+            1 if data["gender"] == "Male" else 0, 
+            1 if data["internetService"] == "Fiber optic" else 0,  
+            1 if data["internetService"] == "No" else 0,           
+            1 if data["contract"] == "One year" else 0,            
+            1 if data["contract"] == "Two year" else 0,            
+            yes_no[data["paperlessBilling"]],                      
+            1 if data["paymentMethod"] == "Credit card (automatic)" else 0, 
+            1 if data["paymentMethod"] == "Electronic check" else 0,        
+            1 if data["paymentMethod"] == "Mailed check" else 0              
         ]
         
         features_array = np.array([features])
@@ -126,7 +125,7 @@ def predict():
 
 if __name__ == "__main__":
     print("\n" + "="*50)
-    print("🚀 Starting Churn Prediction API Server")
+    print(" Starting Churn Prediction API Server")
     print("="*50)
     print(f"Server will run on: http://127.0.0.1:5000")
     print(f"Model loaded: {model is not None}")
