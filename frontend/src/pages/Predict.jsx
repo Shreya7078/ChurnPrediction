@@ -45,7 +45,7 @@ export default function Predict() {
     setLabel("");
 
     try {
-      const res = await fetch("http://127.0.0.1:5000/predict", {
+      const res = await fetch("${import.meta.env.VITE_API_URL}/predict", {
         method: "POST",
         mode: "cors",
         headers: {
